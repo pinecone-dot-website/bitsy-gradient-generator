@@ -1,6 +1,13 @@
 "use strict";
 
+let sprintf = require('sprintf-js').sprintf;
+
 module.exports = function (grunt) {
+    let date = (function () {
+        let now = new Date();
+        return sprintf('%04d-%02d-%02d-%02d%02d', now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes());
+    })();
+
     grunt.initConfig({
         browserify: {
             dist: {
@@ -56,13 +63,25 @@ module.exports = function (grunt) {
                 files: ['es6/**/*.js'],
                 tasks: ['browserify']
             },
+        },
+
+        zip: {
+            dist: {
+                dest: `all-${date}.zip`,
+                src: [
+                    'index.html',
+                    'css/**',
+                    'js/**'
+                ]
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
-    
+    grunt.loadNpmTasks('grunt-zip');
+
     grunt.registerTask('default', [
         'browserify', 'sass'
     ]);
