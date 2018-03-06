@@ -1,0 +1,42 @@
+html {
+    background-color: #aaa;
+}
+
+.color-group {
+    border: 1px solid #333;
+    margin: 8px;
+    width: 128px;
+    span {
+        display: block;
+        height: 42.666666666666667px;
+    }
+    input {
+        width: 128px;
+    }
+}
+
+.controls {
+    border: 1px solid #333;
+    margin: 8px;
+    width: 256px;
+}
+
+#output-code {}
+
+.palette-block {
+    float: left;
+    font-family: monospace;
+    height: 128px;
+    margin: 8px;
+    width: 128px;
+    span {
+        display: block;
+        height: 32px;
+    }
+    .title {
+        background-color: #fff;
+    }
+    .color {
+        background-color: #77a182;
+    }
+}
