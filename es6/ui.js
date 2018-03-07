@@ -14,21 +14,23 @@ document.querySelectorAll( '.color-group' ).forEach( ( el, i ) => {
 } )
 
 // output code
-let block = `<div class="palette-block"><span class="title">PAL <%= i %><span>\r\n
-<span class="color" style="background-color:#<%= generated[0].hex %>"><%= generated[0].display %><span>\r\n
-<span class="color" style="background-color:#<%= generated[1].hex %>"><%= generated[1].display %><span>\r\n
-<span class="color" style="background-color:#<%= generated[2].hex %>"><%= generated[2].display %><span>\r\n
-\r\n
+let block = `<div class="palette-block"><span class="title">PAL <%= i %></span><span 
+class="color" style="background-color:#<%= generated[0].hex %>"><%= generated[0].display %></span><span 
+class="color" style="background-color:#<%= generated[1].hex %>"><%= generated[1].display %></span><span 
+class="color" style="background-color:#<%= generated[2].hex %>"><%= generated[2].display %></span>
+
 </div>`
 
-submit.addEventListener( 'click', ( e ) => {
-    let html = '';
+submit.addEventListener( 'submit', ( e ) => {
+    let html = '',
+        range = controls.querySelectorAll( 'input' );
 
-    for ( let i = controls.children[ 0 ].value; i <= controls.children[ 1 ].value; i++ ) {
-        let percent = ( i - controls.children[ 0 ].value ) / ( controls.children[ 1 ].value - controls.children[ 0 ].value );
+    e.preventDefault();
+
+    for ( let i = range[ 0 ].value; i <= range[ 1 ].value; i++ ) {
+        let percent = ( i - range[ 0 ].value ) / ( range[ 1 ].value - range[ 0 ].value );
 
         let generated = inputs[ 0 ].colors.map( ( el, i ) => {
-            
             let g = gradient( hexToRgb( el ),
                 hexToRgb( inputs[ 1 ].colors[ i ] ),
                 percent );
@@ -108,8 +110,6 @@ function hexToRgb( hex ) {
         parseInt( parsed[ 3 ], 16 )
     ] : [];
 
-    //console.log( 'hexToRgb result', result );
-
     return result;
 }
 
@@ -120,10 +120,10 @@ function hexToRgb( hex ) {
  */
 function RGBtoCMYK( RGB ) {
     let result = [];
-    
-    let r = RGB[0] / 255;
-    let g = RGB[1] / 255;
-    let b = RGB[2] / 255;
+
+    let r = RGB[ 0 ] / 255;
+    let g = RGB[ 1 ] / 255;
+    let b = RGB[ 2 ] / 255;
 
     result[ 3 ] = Math.min( 1 - r, 1 - g, 1 - b );
     result[ 0 ] = ( 1 - r - result[ 3 ] ) / ( 1 - result[ 3 ] );
@@ -168,6 +168,6 @@ function CMYKtoRGB( CMYK ) {
  */
 function rgbToHex( rgb_array ) {
     return rgb_array.map( ( v, i ) => {
-        return v.toString( 16 ).padStart( 2, 0 );
+        return Math.min( v, 255 ).toString( 16 ).padStart( 2, 0 );
     } ).join( '' );
 }

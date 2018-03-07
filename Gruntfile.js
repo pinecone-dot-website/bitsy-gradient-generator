@@ -3,7 +3,7 @@
 let sprintf = require('sprintf-js').sprintf;
 
 module.exports = function (grunt) {
-    let date = (function () {
+    let date = (() => {
         let now = new Date();
         return sprintf('%04d-%02d-%02d-%02d%02d', now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes());
     })();

@@ -1,4 +1,8 @@
 module.exports = class palette {
+    /**
+     * 
+     * @param {*} el 
+     */
     constructor( el ) {
         this.colors = [];
         this.inputs = [];
@@ -12,8 +16,17 @@ module.exports = class palette {
         } );
     }
 
-    parseInput( i, e ) {
-        this.colors[ i ] = e.target.value;
-        e.target.parentNode.style.backgroundColor = e.target.value;
+    /**
+     * 
+     * @param {*} i 
+     * @param {*} el 
+     */
+    parseInput( i, el ) {
+       this.colors[ i ] = el.target.value;
+        
+        el.target.parentNode.style.backgroundColor = el.target.value;
+       
+
+        console.log( this.colors[ i ]);
     }
 };

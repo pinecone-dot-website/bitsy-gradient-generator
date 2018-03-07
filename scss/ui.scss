@@ -4,6 +4,7 @@ html {
 
 .color-group {
     border: 1px solid #333;
+    float: left;
     margin: 8px;
     width: 128px;
     span {
@@ -16,9 +17,18 @@ html {
 }
 
 .controls {
-    border: 1px solid #333;
+    background-color: #ddd;
+    clear: both;
     margin: 8px;
+    padding: 8px;
     width: 256px;
+    span {
+        display: block;
+        padding-bottom: 8px;
+        input {
+            border: 0px solid transparent;
+        }
+    }
 }
 
 #output-code {}
@@ -28,15 +38,18 @@ html {
     font-family: monospace;
     height: 128px;
     margin: 8px;
+    white-space: pre-wrap;
     width: 128px;
     span {
         display: block;
         height: 32px;
-    }
-    .title {
-        background-color: #fff;
-    }
-    .color {
-        background-color: #77a182;
+        &.color {
+            background-color: #77a182;
+            line-height: 32px;
+        }
+        &.title {
+            background-color: #fff;
+            line-height: 32px;
+        }
     }
 }
