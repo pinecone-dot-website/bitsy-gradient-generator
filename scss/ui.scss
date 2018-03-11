@@ -31,18 +31,28 @@ html {
     }
 }
 
-#output-code {}
+#output-code {
+    float: left;
+    font-family: monospace;
+    height: 32em;
+    width: 16em;
+}
+
+#output-visual {
+    margin-left: 20em;
+}
 
 .palette-block {
     float: left;
     font-family: monospace;
     height: 128px;
     margin: 8px;
-    white-space: pre-wrap;
+    white-space: nowrap;
     width: 128px;
     span {
         display: block;
         height: 32px;
+        padding-left: 8px;
         &.color {
             background-color: #77a182;
             line-height: 32px;

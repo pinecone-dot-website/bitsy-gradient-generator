@@ -1,8 +1,10 @@
 "use strict";
 
-let palette = require( './palette.js' );
+let hbs = require( 'handlebars' ),
+    palette = require( './palette.js' );
 
-let code = document.querySelector( '#output-code' ),
+let output_code = document.querySelector( '#output-code' ),
+    output_visual = document.querySelector( '#output-visual' ),
     controls = document.querySelector( '.controls' ),
     submit = document.querySelector( '#generate' );
 
@@ -11,18 +13,24 @@ let inputs = [];
 // setup color inputs
 document.querySelectorAll( '.color-group' ).forEach( ( el, i ) => {
     inputs[ i ] = new palette( el );
-} )
+} );
 
-// output code
-let block = `<div class="palette-block"><span class="title">PAL <%= i %></span><span 
-class="color" style="background-color:#<%= generated[0].hex %>"><%= generated[0].display %></span><span 
-class="color" style="background-color:#<%= generated[1].hex %>"><%= generated[1].display %></span><span 
-class="color" style="background-color:#<%= generated[2].hex %>"><%= generated[2].display %></span>
+let block_code = hbs.compile( `PAL {{i}}
+{{generated.0.display}}
+{{generated.1.display}}
+{{generated.2.display}}
 
-</div>`
+` );
+
+let block_visual = hbs.compile( `<div class="palette-block"><span class="title">PAL {{i}}</span>
+    <span class="color" style="background-color:#{{generated.0.hex}}">{{generated.0.display}}</span>
+    <span class="color" style="background-color:#{{generated.1.hex}}">{{generated.1.display}}</span>
+    <span class="color" style="background-color:#{{generated.2.hex}}">{{generated.2.display}}</span>
+</div>` );
 
 submit.addEventListener( 'submit', ( e ) => {
-    let html = '',
+    let code = '',
+        visual = '',
         range = controls.querySelectorAll( 'input' );
 
     e.preventDefault();
@@ -43,14 +51,33 @@ submit.addEventListener( 'submit', ( e ) => {
             return color;
         } );
 
-        html += tmpl( block, {
+        code += block_code( {
+            generated: generated,
+            i: i
+        } );
+
+        visual += block_visual( {
             generated: generated,
             i: i
         } );
     }
 
-    code.innerHTML = html;
+    output_code.innerHTML = code;
+    output_visual.innerHTML = visual;
 } );
+
+/**
+ * Returns the text from a HTML string
+ * 
+ * @param {html} String The html string
+ */
+function strip_html( html ) {
+    let temporalDivElement = document.createElement( "div" );
+    temporalDivElement.innerHTML = html;
+
+    let text = temporalDivElement.textContent || temporalDivElement.innerText || "";
+    return text.replace( / {4}/g, "\r\n" );
+}
 
 function gradient( rgb_start, rgb_end, percent = .5 ) {
     let cmyk_vals = [
@@ -85,10 +112,10 @@ function tmpl( str, data ) {
         str
         .replace( /[\r\t\n]/g, " " )
         .split( "<%" ).join( "\t" )
-        .replace( /((^|%>)[^\t]*)'/g, "$1\r" )
-        .replace( /\t=(.*?)%>/g, "',$1,'" )
+        .replace( /((^|}})[^\t]*)'/g, "$1\r" )
+        .replace( /\t=(.*?)}}/g, "',$1,'" )
         .split( "\t" ).join( "');" )
-        .split( "%>" ).join( "p.push('" )
+        .split( "}}" ).join( "p.push('" )
         .split( "\r" ).join( "\\'" ) +
         "');}return p.join('');" );
 
