@@ -17,6 +17,7 @@
         "grunt-contrib-watch": "^1.0.0",
         "grunt-sass": "^2.1.0",
         "grunt-zip": "^0.17.1",
+        "handlebars": "^4.0.11",
         "sprintf-js": "^1.1.1"
     }
 }
