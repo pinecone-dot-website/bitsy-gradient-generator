@@ -6,6 +6,7 @@ let hbs = require( 'handlebars' ),
 let output_code = document.querySelector( '#output-code' ),
     output_visual = document.querySelector( '#output-visual' ),
     controls = document.querySelector( '.controls' ),
+    range = controls.querySelectorAll( 'input' ),
     submit = document.querySelector( '#generate' );
 
 let inputs = [];
@@ -29,14 +30,18 @@ let block_visual = hbs.compile( `<div class="palette-block"><span class="title">
 </div>` );
 
 submit.addEventListener( 'submit', ( e ) => {
-    let code = '',
-        visual = '',
-        range = controls.querySelectorAll( 'input' );
-
     e.preventDefault();
 
-    for ( let i = range[ 0 ].value; i <= range[ 1 ].value; i++ ) {
-        let percent = ( i - range[ 0 ].value ) / ( range[ 1 ].value - range[ 0 ].value );
+    let code = '',
+        visual = '',
+        range_vals = [];
+
+    range.forEach((el, i)=>{
+        range_vals[i] = parseInt( el.value, 10);
+    });
+
+    for ( let i = range_vals[0]; i <= range_vals[1]; i++ ) {
+        let percent = ( i - range_vals[0] ) / ( range_vals[1] - range_vals[0] );
 
         let generated = inputs[ 0 ].colors.map( ( el, i ) => {
             let g = gradient( hexToRgb( el ),
@@ -51,15 +56,13 @@ submit.addEventListener( 'submit', ( e ) => {
             return color;
         } );
 
-        code += block_code( {
+        let params = {
             generated: generated,
             i: i
-        } );
+        };
 
-        visual += block_visual( {
-            generated: generated,
-            i: i
-        } );
+        code += block_code( params );
+        visual += block_visual( params );
     }
 
     output_code.innerHTML = code;
